@@ -1,22 +1,26 @@
-name: Cache Workflow
+# .github/workflows/cache-demo.yml
+name: Cache Demo
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
-  cache-job:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Cache dependencies
-        id: cache-step
+      - name: prime-cache-c84cd4a    # MUST match exactly
+        id: cache
         uses: actions/cache@v4
         with:
-          path: ~/.cache
+          path: |
+            ~/.npm
+            node_modules
           key: cache-c84cd4a
 
-      - name: prime-cache-c84cd4a
-        run: echo "Cache hit? ${{ steps.cache-step.outputs.cache-hit }}"
+      - name: Show cache result
+        run: echo "Cache hit? ${{ steps.cache.outputs.cache-hit }}"
